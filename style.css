@@ -1,21 +1,23 @@
-/* --- 1. ОСНОВА --- */
 :root {
     --bg-paper: #f4f1ee;
     --text-white: #ffffff;
     --text-dark: #3a3530;
     --font-serif: "Cormorant Garamond", serif;
     --font-sans: "Montserrat", sans-serif;
-    --border-color: rgba(58, 53, 48, 0.15);
+    --border-color: rgba(58, 53, 48, 0.12);
 
-    /* Вертикальный ритм */
-    --section-spacing: 160px;
-    --header-margin: 60px;
+    --section-spacing: 110px; /* +10% */
+    --header-margin: 45px; /* +10% */
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    font-size: 14.5px; /* Идеальный баланс между 14 и 15 */
 }
 
 body {
@@ -27,12 +29,42 @@ body {
 }
 
 .content-limit {
-    max-width: 1200px;
+    max-width: 920px; /* Увеличил с 850px */
     margin: 0 auto;
     padding: 0 40px;
 }
 
-/* --- 2. HERO --- */
+/* --- ФИКС ЗАГОЛОВКОВ --- */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: var(--header-margin);
+    width: 100%;
+}
+
+.header-center {
+    justify-content: center;
+}
+.header-right {
+    justify-content: flex-end;
+}
+
+.intro-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.35rem;
+    color: var(--text-dark);
+    flex-shrink: 0; /* Чтобы текст не сжимался */
+}
+
+.horizontal-line {
+    height: 1px;
+    background-color: var(--border-color);
+    flex-grow: 1; /* Линия занимает всё свободное место */
+}
+
+/* --- HERO --- */
 .hero-section {
     height: 100vh;
     display: flex;
@@ -49,19 +81,19 @@ body {
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 0.5)
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.4)
     );
     z-index: 1;
 }
 
 .hero-logo {
     position: absolute;
-    top: 40px;
+    top: 35px;
     z-index: 10;
     font-family: var(--font-serif);
-    font-size: 1.2rem;
-    letter-spacing: 0.8rem;
+    font-size: 1rem;
+    letter-spacing: 0.7rem;
     text-transform: uppercase;
     color: var(--text-white);
 }
@@ -69,24 +101,24 @@ body {
 .hero-container {
     position: relative;
     z-index: 5;
-    padding-top: 15vh;
+    padding-top: 20vh;
     text-align: center;
 }
 
 .hero-title {
     font-family: var(--font-serif);
-    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
     font-weight: 300;
     color: var(--text-white);
     line-height: 1.1;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .hero-quote {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: clamp(1.1rem, 2vw, 1.5rem);
-    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .hero-product {
@@ -95,9 +127,9 @@ body {
     left: 50%;
     transform: translateX(-50%);
     z-index: 15;
-    width: 90%;
-    max-width: 1100px;
-    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.15));
+    width: 80%;
+    max-width: 850px;
+    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.15));
 }
 
 .hero-product img {
@@ -108,10 +140,10 @@ body {
 
 .wave-container {
     position: absolute;
-    bottom: -2px;
+    bottom: -1px;
     left: 0;
     width: 100%;
-    height: 40vh;
+    height: 38vh;
     z-index: 4;
 }
 
@@ -121,46 +153,26 @@ body {
     display: block;
 }
 
-/* --- 3. ОБЩИЕ ЭЛЕМЕНТЫ ЗАГОЛОВКОВ --- */
-.intro-label {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.4rem;
-    white-space: nowrap;
-    color: var(--text-dark);
-}
-
-.horizontal-line {
-    flex: 1;
-    height: 1px;
-    background-color: var(--border-color);
-}
-
-/* --- 4. INTRO SECTION --- */
+/* --- INTRO --- */
 .intro-section {
-    padding-top: 100px;
-}
-
-.intro-header {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: var(--header-margin);
+    padding-top: 80px;
 }
 
 .intro-body {
-    padding-left: 50px;
+    padding: 0 40px;
     margin-bottom: var(--section-spacing);
+    text-align: center;
 }
 
 .intro-description {
     font-family: var(--font-serif);
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-size: clamp(1.4rem, 2.8vw, 2.1rem);
     font-weight: 300;
-    max-width: 900px;
+    line-height: 1.5;
+    max-width: 850px;
 }
 
-/* --- 5. DNA SECTION --- */
+/* --- DNA --- */
 .dna-section {
     margin-bottom: var(--section-spacing);
 }
@@ -174,16 +186,34 @@ body {
 
 .dna-item {
     flex: 1;
-    min-width: 300px;
-    padding: 80px 40px;
+    min-width: 220px;
+    padding: 55px 30px;
     border-right: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    z-index: 1;
-    transition: color 0.6s ease;
+    transition: color 0.5s ease;
+}
+
+.dna-item h3 {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    margin-bottom: 12px;
+}
+.dna-desc {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: #5b534d;
+    margin-bottom: 30px;
+}
+.dna-sub {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12rem;
+    color: #aaa29a;
+    margin-top: auto;
 }
 
 .dna-item::before {
@@ -194,80 +224,45 @@ body {
     background-size: cover;
     background-position: center;
     opacity: 0;
-    transform: scale(1.1);
-    transition: 0.8s ease;
+    transform: scale(1.05);
+    transition: 0.7s ease;
     z-index: -2;
 }
-
 .dna-item::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.45);
     opacity: 0;
-    transition: 0.6s ease;
+    transition: 0.5s ease;
     z-index: -1;
 }
-
 .dna-item:hover {
     color: #fff;
 }
-.dna-item:hover::before {
+.dna-item:hover::before,
+.dna-item:hover::after {
     opacity: 1;
     transform: scale(1);
 }
-.dna-item:hover::after {
-    opacity: 1;
-}
 
-.dna-item h3 {
-    font-family: var(--font-serif);
-    font-size: 2.2rem;
-    margin-bottom: 20px;
-}
-.dna-desc {
-    font-family: var(--font-serif);
-    font-size: 1.2rem;
-    color: #5b534d;
-    margin-bottom: 40px;
-    transition: inherit;
-}
-.dna-sub {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15rem;
-    color: #aaa29a;
-    margin-top: auto;
-}
-.dna-item:hover .dna-desc {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* --- 6. CATALOG & GALLERY --- */
+/* --- CATALOG --- */
 .catalog-section {
     margin-bottom: var(--section-spacing);
-}
-
-.centered-header {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: var(--header-margin);
 }
 
 .gallery-intro {
     display: flex;
     align-items: center;
-    gap: 80px;
-    margin-bottom: 80px;
+    gap: 50px;
+    margin-bottom: 60px;
 }
-
 .gallery-featured-img {
     flex: 1.2;
 }
 .gallery-featured-img img {
     width: 100%;
-    height: 500px;
+    height: 350px;
     object-fit: cover;
 }
 
@@ -275,38 +270,39 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 25px;
 }
 .spec-item h4 {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
     color: #aaa29a;
-    letter-spacing: 0.2rem;
-    margin-bottom: 10px;
+    letter-spacing: 0.15rem;
+    margin-bottom: 6px;
 }
 .spec-item p {
     font-family: var(--font-serif);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 300;
+    line-height: 1.5;
 }
 
 .catalog-grid {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 50px;
     flex-wrap: wrap;
 }
 
 .product-card {
     flex: 1;
-    min-width: 320px;
-    max-width: 420px;
+    min-width: 260px;
+    max-width: 340px;
 }
 
 .product-image-wrapper {
     background: #ebe7e3;
-    height: 520px;
-    margin-bottom: 30px;
+    height: 400px;
+    margin-bottom: 22px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -315,95 +311,82 @@ body {
 }
 
 .product-image-wrapper img {
-    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
-    will-change: transform;
-}
-
-/* Форматы */
-.card-a5 .product-image-wrapper img {
-    width: 70%;
+    transition: transform 0.8s ease;
+    width: 68%;
 }
 .card-a6 .product-image-wrapper img {
-    width: 50%;
+    width: 48%;
 }
 .product-card:hover .product-image-wrapper img {
-    transform: scale(1.08);
+    transform: scale(1.06);
 }
 
 .size-tag {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 0.65rem;
+    top: 15px;
+    right: 15px;
+    font-size: 0.6rem;
     color: #aaa29a;
     border: 1px solid var(--border-color);
-    padding: 4px 10px;
+    padding: 3px 8px;
 }
 
 .product-info h3 {
     font-family: var(--font-serif);
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 7px;
 }
 .product-info p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #5b534d;
+    line-height: 1.5;
 }
 
 .order-action {
     display: flex;
     justify-content: center;
-    padding-top: 80px;
+    padding-top: 60px;
 }
 
 .btn-order {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.4rem;
+    letter-spacing: 0.35rem;
     text-decoration: none;
     background: var(--text-dark);
     color: var(--bg-paper);
     border: 1px solid var(--text-dark);
-    padding: 22px 60px;
+    padding: 18px 45px;
     transition: all 0.5s ease;
 }
-
 .btn-order:hover {
     background: transparent;
     color: var(--text-dark);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
 
-/* --- 7. CONTACTS --- */
+/* --- CONTACTS --- */
 .contacts-section {
-    margin-bottom: 100px;
-}
-
-.right-header {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: var(--header-margin);
+    margin-bottom: 80px;
 }
 
 .social-minimal-container {
     display: flex;
     justify-content: center;
-    padding-top: 40px;
+    padding-top: 30px;
 }
 .social-images-grid {
     display: flex;
-    gap: 40px;
+    gap: 35px;
     align-items: center;
 }
 
 .contact-image-link {
     display: block;
-    width: 45px;
+    width: 36px;
     opacity: 0.5;
     transition: all 0.4s ease;
 }
-
 .contact-image-link:hover {
     opacity: 1;
     transform: translateY(-3px);
@@ -414,41 +397,34 @@ body {
     display: block;
 }
 
-/* --- 8. FOOTER --- */
+/* --- FOOTER --- */
 .mini-footer {
-    padding: 40px 0;
+    padding: 30px 0;
     border-top: 1px solid var(--border-color);
     text-align: center;
 }
 .mini-footer p {
     font-size: 0.6rem;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.15rem;
     color: #aaa29a;
     text-transform: uppercase;
 }
 
-/* --- 9. АДАПТИВНОСТЬ --- */
-@media (max-width: 900px) {
-    .gallery-intro {
-        flex-direction: column;
-        gap: 40px;
-    }
-    .gallery-featured-img img {
-        height: 350px;
-    }
-}
-
+/* --- MOBILE --- */
 @media (max-width: 768px) {
     .content-limit {
         padding: 0 20px;
     }
-    .intro-body {
-        padding-left: 0;
+    .gallery-intro {
+        flex-direction: column;
     }
-    .product-image-wrapper {
-        height: 420px;
+    .hero-title {
+        font-size: 2.8rem;
     }
-    :root {
-        --section-spacing: 100px;
+    .section-header .horizontal-line {
+        display: none;
+    } /* На мобилках линии часто мешают */
+    .section-header {
+        justify-content: center;
     }
 }

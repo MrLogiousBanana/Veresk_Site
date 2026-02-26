@@ -19,7 +19,7 @@ const quotes = [
   "«В мире, где слишком много шума, истина рождается в тишине».",
 ];
 
-const heroImages = ["1.jpg", "2.jpg", "3.jpg", "4.jpg"];
+const heroImages = ["2.jpg", "3.jpg", "4.jpg"];
 
 function renderGallery() {
   const container = document.getElementById("catalog-container");

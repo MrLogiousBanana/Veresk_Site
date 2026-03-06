@@ -2,24 +2,31 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Debug Parallax</title>
-    <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
+    <title>Quest Fix</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/threejs/r128/three.min.js"></script>
     <style>
-        body { margin: 0; background: #111; overflow: hidden; }
-        canvas { display: block; }
-    </style>
+        body { margin: 0; background: #222; overflow: hidden; font-family: sans-serif; }
+        #error-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            display: none; background: rgba(0,0,0,0.8); color: white; 
+            justify-content: center; align-items: center; text-align: center;
+        }
+    </script>
 </head>
 <body>
-    <script>
-        window.onload = function() {
-            // Проверка, что Three.js загрузился
-            if (typeof THREE === 'undefined') {
-                document.body.innerHTML = "<h1 style='color:white'>Ошибка: Three.js не загружен!</h1>";
-                return;
-            }
+    <div id="error-overlay"><h1>Ошибка: Библиотека всё еще не грузится</h1></div>
 
+    <script>
+        // Проверка загрузки
+        if (typeof THREE === 'undefined') {
+            document.getElementById('error-overlay').style.display = 'flex';
+        } else {
+            initScene();
+        }
+
+        function initScene() {
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x222222);
+            scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 5;
@@ -28,57 +35,64 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // Добавляем свет (на всякий случай)
-            const light = new THREE.AmbientLight(0xffffff, 1);
-            scene.add(light);
-
-            // Создаем слои (просто цветные меши для теста)
+            // Создаем слои
             const layers = [];
+            const loader = new THREE.TextureLoader();
 
-            function createLayer(color, z, size, factor) {
-                const geo = new THREE.PlaneGeometry(size.x, size.y);
-                const mat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.z = z;
-                scene.add(mesh);
-                layers.push({ mesh, factor });
+            // ФОН (Картинка)
+            const bgMat = new THREE.MeshBasicMaterial({ color: 0x444444 });
+            // Пробуем загрузить твою картинку
+            loader.load('assets/hero-bg/4.jpg', 
+                (t) => { bgMat.map = t; bgMat.needsUpdate = true; },
+                undefined,
+                () => { console.log("Файл 4.jpg не найден, использую заглушку"); }
+            );
+            const bg = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), bgMat);
+            bg.position.z = -2;
+            scene.add(bg);
+            layers.push({ m: bg, f: 0.05 });
+
+            // СРЕДНИЙ СЛОЙ (Зеленые кружки)
+            const group = new THREE.Group();
+            for(let i=0; i<10; i++) {
+                const c = new THREE.Mesh(new THREE.CircleGeometry(0.2, 32), new THREE.MeshBasicMaterial({color: 0x00ff88}));
+                c.position.set(Math.random()*6-3, Math.random()*4-2, 0);
+                group.add(c);
             }
+            group.position.z = 0;
+            scene.add(group);
+            layers.push({ m: group, f: 0.2 });
 
-            // Задний фон (Красный)
-            createLayer(0xff0000, -2, {x: 8, y: 5}, 0.05);
-            // Средний слой (Зеленый)
-            createLayer(0x00ff00, 0, {x: 2, y: 2}, 0.2);
-            // Передний слой (Синий)
-            createLayer(0x0000ff, 2, {x: 1, y: 0.5}, 0.5);
+            // ПЕРЕДНИЙ СЛОЙ (Кнопки)
+            const btn = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.4), new THREE.MeshBasicMaterial({color: 0x0088ff}));
+            btn.position.z = 2;
+            scene.add(btn);
+            layers.push({ m: btn, f: 0.5 });
 
-            let mouseX = 0, mouseY = 0;
-
+            let mx = 0, my = 0;
             window.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                mx = (e.clientX / window.innerWidth) * 2 - 1;
+                my = -(e.clientY / window.innerHeight) * 2 + 1;
             });
 
-            // Поддержка Quest (наклон)
+            // Наклон для Квеста
             window.addEventListener('deviceorientation', (e) => {
-                if(e.gamma) {
-                    mouseX = e.gamma / 30;
-                    mouseY = (e.beta - 90) / 30;
+                if (e.gamma) {
+                    mx = e.gamma / 40;
+                    my = (e.beta - 90) / 40;
                 }
             });
 
             function animate() {
                 requestAnimationFrame(animate);
                 layers.forEach(l => {
-                    const targetX = mouseX * l.factor * 5;
-                    const targetY = mouseY * l.factor * 5;
-                    l.mesh.position.x += (targetX - l.mesh.position.x) * 0.1;
-                    l.mesh.position.y += (targetY - l.mesh.position.y) * 0.1;
+                    l.m.position.x += (mx * l.f * 4 - l.m.position.x) * 0.1;
+                    l.m.position.y += (my * l.f * 4 - l.m.position.y) * 0.1;
                 });
                 renderer.render(scene, camera);
             }
             animate();
-            console.log("Debug: Render started");
-        };
+        }
     </script>
 </body>
 </html>

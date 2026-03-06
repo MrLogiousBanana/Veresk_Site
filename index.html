@@ -2,138 +2,59 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вереск | Мастерская авторских открыток</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <title>Quest WebDepth Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background: #000; }
+        #webxr-button { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; z-index: 100; }
+    </style>
 </head>
 <body>
+    <script>
+        let scene, camera, renderer, plane;
 
-    <section class="hero-section" id="hero">
-        <div class="hero-logo">Вереск</div>
-        <div class="hero-overlay"></div>
-        <div class="hero-container">
-            <h1 class="hero-title">Тишина, воплощенная <br><i>в бумаге</i></h1>
-            <p class="hero-quote" id="dynamic-quote"></p>
-        </div>
-        <div class="hero-product">
-            <img src="assets/stand-photo.png" alt="Открытки Вереск">
-        </div>
-        <div class="wave-container">
-            <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="wave-desktop">
-                <path d="M1440,320 L0,320 L0,220 C400,320 1000,0 1440,100 Z" fill="#F4F1EE"></path>
-            </svg>
-        </div>
-    </section>
+        init();
+        animate();
 
-    <section class="intro-section">
-        <div class="content-limit">
-            <div class="section-header">
-                <span class="intro-label">О проекте</span>
-                <div class="horizontal-line"></div>
-            </div>
-            <div class="intro-body">
-                <h2 class="intro-description">
-                    Вереск — это мастерская авторских открыток на стопроцентном хлопке.
-                    Мы создаем физическое воплощение памяти и тишины.
-                </h2>
-            </div>
-        </div>
-    </section>
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 2;
 
-    <section class="dna-section">
-        <div class="content-limit">
-            <div class="dna-grid">
-                <div class="dna-item" style="--dna-bg: url('assets/DNA/1.jpg');">
-                    <h3>Время</h3>
-                    <p class="dna-desc">Память как способ никогда не умереть.</p>
-                    <p class="dna-sub">Наследие</p>
-                </div>
-                <div class="dna-item" style="--dna-bg: url('assets/DNA/2.jpg');">
-                    <h3>Семья</h3>
-                    <p class="dna-desc">О том, что нас создают наши близкие.</p>
-                    <p class="dna-sub">Люди</p>
-                </div>
-                <div class="dna-item" style="--dna-bg: url('assets/DNA/3.jpg');">
-                    <h3>Тактильность</h3>
-                    <p class="dna-desc">Премиальный хлопок, приятный на ощупь.</p>
-                    <p class="dna-sub">Материалы</p>
-                </div>
-                <div class="dna-item" style="--dna-bg: url('assets/DNA/4.jpg');">
-                    <h3>Честность</h3>
-                    <p class="dna-desc">Искренне о работе и смыслах.</p>
-                    <p class="dna-sub">Принципы</p>
-                </div>
-                <div class="dna-item" style="--dna-bg: url('assets/DNA/5.jpg');">
-                    <h3>Тишина</h3>
-                    <p class="dna-desc">Некричащий контент и уют.</p>
-                    <p class="dna-sub">Атмосфера</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.xr.enabled = true; // Включаем поддержку XR
+            document.body.appendChild(renderer.domElement);
 
-    <section class="catalog-section">
-        <div class="content-limit">
-            <div class="section-header header-center">
-                <div class="horizontal-line"></div>
-                <span class="intro-label">Галерея</span>
-                <div class="horizontal-line"></div>
-            </div>
+            // Создаем "карточку" поста
+            const geometry = new THREE.PlaneGeometry(1.5, 1);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                map: new THREE.TextureLoader().load('https://picsum.photos/600/400') // Заглушка фото
+            });
+            plane = new THREE.Mesh(geometry, material);
+            scene.add(plane);
 
-            <div class="gallery-intro">
-                <div class="gallery-featured-img">
-                    <img src="assets/cards/detail-photo.jpg" alt="Фактура хлопка">
-                </div>
-                <div class="gallery-specs">
-                    <div class="spec-item">
-                        <h4>Материал</h4>
-                        <p>100% органический хлопок премиального качества, плотностью 300 г/м².</p>
-                    </div>
-                    <div class="spec-item">
-                        <h4>Печать</h4>
-                        <p>Высокая печать с глубоким оттиском, создающая неповторимый рельеф.</p>
-                    </div>
-                    <div class="spec-item">
-                        <h4>Ощущения</h4>
-                        <p>Мягкая, бархатистая фактура, к которой хочется прикасаться снова и снова.</p>
-                    </div>
-                </div>
-            </div>
+            // Добавляем свет
+            const light = new THREE.AmbientLight(0xffffff, 1);
+            scene.add(light);
+        }
 
-            <div class="catalog-grid" id="catalog-container"></div>
+        function animate() {
+            renderer.setAnimationLoop(render);
+        }
 
-            <div class="order-action">
-                <a href="#" class="btn-order">Сделать заказ</a>
-            </div>
-        </div>
-    </section>
+        function render() {
+            // Магия параллакса:
+            // В XR режиме camera.position автоматически обновляется данными шлема
+            if (renderer.xr.isPresenting) {
+                // Слегка поворачиваем плоскость вслед за головой, создавая иллюзию объема
+                plane.rotation.y = camera.position.x * 0.1;
+                plane.rotation.x = -camera.position.y * 0.1;
+            }
 
-    <section class="contacts-section">
-        <div class="content-limit">
-            <div class="section-header header-right">
-                <div class="horizontal-line"></div>
-                <span class="intro-label">Контакты</span>
-            </div>
-            <div class="social-minimal-container">
-                <div class="social-images-grid">
-                    <a href="https://www.tiktok.com/@astefart?_r=1&_t=ZS-94FQpWlMkgm" target="_blank" class="contact-image-link">
-                        <img src="assets/icons/tiktok-btn.png" alt="TikTok">
-                    </a>
-                    <a href="https://t.me/gameofherlife" target="_blank" class="contact-image-link">
-                        <img src="assets/icons/tg-btn.png" alt="Telegram">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="mini-footer">
-        <div class="content-limit">
-            <p>&copy; 2024 ВЕРЕСК</p>
-        </div>
-    </footer>
-
-    <script src="scripts/main.js"></script>
+            renderer.render(scene, camera);
+        }
+    </script>
 </body>
 </html>
